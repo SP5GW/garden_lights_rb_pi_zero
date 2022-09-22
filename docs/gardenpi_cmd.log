@@ -1,0 +1,134 @@
+# https://www.raspberrypi.com/software/
+# download and install Raspberry Pi Imager on your PC or Mac OS
+# select OS: Raspberry Pi OS (other) -> Raspberry Pi OS Lite (32-bit), released 2022-09-06
+# select Storage: your SD card
+# click on settings icon right-down corner
+# 	set hostname to gardenpi
+# 	enable ssh
+# 	set username to pi
+# 	set password to raspberry
+# 	check configure wireless LAN
+# 		set SSID and password for your WLAN
+# 		set localle settings
+# 	press save
+# press write in main window, this shall flash ssd card
+
+
+# put ssd into pi
+# to use ssh over usb, wifi is not reliable on pi zero...
+
+# create empty text file called ssh (no extension) in /boot directory on ssd
+# add to /boot/config.txt following line: 
+dtoverlay=dwc2
+
+# add to the end of the string in /boot/cmdline.txt file (after space):
+ modules-load=dwc2,g_ether 
+
+
+# connect usb cable to micro USB port of gardenpi closest to processor chip
+
+# give a good time for pi to boot
+
+# from your master rb pi:
+
+ssh pi@gardenpi.local
+
+# now when you are on gardenpi you can start its configuration
+
+
+sudo nano /etc/ssh/sshd-banner
+# message to add:
+#WARNING:  Unauthorized access to this system is forbidden and will be
+#prosecuted by law. By accessing this system, you agree that your actions
+#may be monitored if unauthorized usage is suspected.
+
+sudo nano /etc/ssh/sshd_config
+# add the following line at the end of the file
+# Banner /etc/ssh/sshd-banner
+
+sudo nano /etc/motd
+# message to add:
+
+    *****************************************************************
+    *                                                               *
+    * This pi is running garden light control service.              *
+    *   service file: /etc/systemd/system/gardenlightsctrl.service  *
+    *   service script: /home/pi/PyScripts/SolarCalc/solarcalc.py   *
+    *                                                               *
+    * files modified on this platform:                              *
+    *   /boot/config.txt                                            *
+    *   /boot/cmdline.txt                                           *
+    *   /etc/ssh/sshd-banner                                        *
+    *   /etc/ssh/sshd_config                                        *
+    *   /etc/motd                                                   *
+    *   /lib/udev/hwclock-set                                       *
+    *                                                               *
+    * updates/upgrades fetched:                                     *
+    *   sudo apt-get update -y                                      *
+    *   sudo apt-get upgrade -y                                     *
+    *                                                               *
+    * manual configuration changes:                                 *
+    *  sudo apt-get -y remove fake-hwclock                          *
+    *  sudo update-rc.d -f fake-hwclock remove                      *
+    *  sudo systemctl disable fake-hwclock                          *
+    *                                                               *
+    * utilities added:                                              *
+    *  sudo apt-get install i2c-tools                               *
+    *  sudo apt install python3-pip                                 *
+    *  pip3 install smbus                                           *
+    *                                                               *
+    * python3 packages added:                                       *
+    *  pip3 install tzlocal                                         *
+    *  pip3 install astral                                          *
+    *  pip3 install pause                                           *
+    *                                                               *
+    *                                                               *
+    * to check status of the running service execute:               *
+    *   sudo systemctl status gardenlightsctrl.service              *                                                            *
+    *                                                               *
+    * <C> 2021-2022 andrzej@mazur.info                              *
+    *                                                               *
+    *****************************************************************
+
+
+
+sudo apt-get update -y
+sudo apt-get upgrade -y
+
+sudo raspi-config #<------enable i2c support 
+
+sudo apt-get install i2c-tools
+sudo apt install python3-pip
+pip3 install smbus
+
+sudo nano /boot/config.txt #<---- add ds3231 support, see:config.txt file, 
+#string to add at the end of the file: dtoverlay=i2c-rtc,ds3231
+
+sudo apt-get -y remove fake-hwclock
+sudo update-rc.d -f fake-hwclock remove
+sudo systemctl disable fake-hwclock
+
+sudo nano /lib/udev/hwclock-set #<----comment out, see: hwclock file
+#following needs to be commented out:
+
+# #if [ -e /run/systemd/system ] ; then
+# #    exit 0
+# #fi
+
+reboot
+
+mkdir /home/pi/PyScripts
+mkdir /home/pi/PyScripts/SolarCalc
+
+
+scp solarcalc.py pi@gardenpi.local:/home/pi/PyScripts/SolarCalc
+scp relay_on_off.py pi@gardenpi.local:/home/pi/PyScripts/SolarCalc
+scp gardenlightsctrl.service pi@gardenpi.local:/etc/systemd/system
+ 
+pip3 install tzlocal
+pip3 install astral
+pip3 install pause
+
+sudo systemctl start gardenlightsctrl.service
+sudo systemctl enable gardenlightsctrl.service
+sudo systemctl status gardenlightsctrl.service

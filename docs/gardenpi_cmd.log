@@ -1,6 +1,13 @@
 # https://www.raspberrypi.com/software/
 # download and install Raspberry Pi Imager on your PC or Mac OS
-# select OS: Raspberry Pi OS (other) -> Raspberry Pi OS Lite (32-bit), released 2022-09-06
+# select OS:
+#         Raspberry Pi OS Lite
+#         Release date: September 6th 2022
+#         System: 32-bit
+#         Kernel version: 5.15
+#         Debian version: 11 (bullseye)
+#         Size: 338MB
+#
 # select Storage: your SD card
 # click on settings icon right-down corner
 # 	set hostname to gardenpi
@@ -12,6 +19,9 @@
 # 		set localle settings
 # 	press save
 # press write in main window, this shall flash ssd card
+
+# NOTE: all config files mentioned in section below can be found in 
+# ~/config directory of git repo.
 
 
 # put ssd into pi

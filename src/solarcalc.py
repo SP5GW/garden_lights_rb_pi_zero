@@ -15,6 +15,18 @@ import os
 import logging
 import sys
 
+#define default values for parameters defined in ini file.
+defaults_ini = {
+    'city':'Otwock',
+    'country':'Poland',
+    'latitude':'52°06′N',
+    'longitude':'21°15′E',
+    'lights_on_delay':'30',
+    'lights_on_duration':'2',
+    'log_to_file':'False',
+    'log_all':'False'
+   }
+
 #Set debug to True in order to log all messages!
 LOG_ALL = False
 #Set log_to_file flag to False in order to print logs on stdout

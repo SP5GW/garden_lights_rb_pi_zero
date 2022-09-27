@@ -7,45 +7,47 @@ individual files in /usr/share/doc/*/copyright.
 Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 permitted by applicable law.
 
-    *****************************************************************
-    *                                                               *
-    * This pi is running garden light control service.              *
-    *   service file: /etc/systemd/system/gardenlightsctrl.service  *
-    *   service script: /home/pi/PyScripts/SolarCalc/solarcalc.py   *
-    *                                                               *
-    * files modified on this platform:                              *
-    *   /boot/config.txt                                            *
-    *   /boot/cmdline.txt                                           *
-    *   /etc/ssh/sshd-banner                                        *
-    *   /etc/ssh/sshd_config                                        *
-    *   /etc/motd                                                   *
-    *   /lib/udev/hwclock-set                                       *
-    *                                                               *
-    * updates/upgrades fetched:                                     *
-    *   sudo apt-get update -y                                      *
-    *   sudo apt-get upgrade -y                                     *
-    *                                                               *
-    * manual configuration changes:                                 *
-    *  sudo apt-get -y remove fake-hwclock                          *
-    *  sudo update-rc.d -f fake-hwclock remove                      *
-    *  sudo systemctl disable fake-hwclock                          *
-    *                                                               *
-    * utilities added:                                              *
-    *  sudo apt-get install i2c-tools                               *
-    *  sudo apt install python3-pip                                 *
-    *  pip3 install smbus                                           *
-    *                                                               *
-    * python3 packages added:                                       *
-    *  pip3 install tzlocal                                         *
-    *  pip3 install astral                                          *
-    *  pip3 install pause                                           *
-    *                                                               *
-    *                                                               *
-    * to check status of the running service execute:               *
-    *   sudo systemctl status gardenlightsctrl.service              *                                                            *
-    *                                                               *
-    * <C> 2021-2022 andrzej@mazur.info                              *
-    *                                                               *
-    *****************************************************************
+    *********************************************************************
+    *                                                                   *
+    * This pi is running garden light control service.                  *
+    *   service file: /etc/systemd/system/gardenlightsctrl.service      *
+    *   service script: /home/pi/PyScripts/SolarCalc/solarcalc.py       *
+    *   configuration file: /home/pi/PyScripts/SolarCalc/solarcalc.ini  *
+    *                                                                   *
+    * files modified on this platform:                                  *
+    *   /boot/config.txt                                                *
+    *   /boot/cmdline.txt                                               *
+    *   /etc/ssh/sshd-banner                                            *
+    *   /etc/ssh/sshd_config                                            *
+    *   /etc/motd                                                       *
+    *   /lib/udev/hwclock-set                                           *
+    *                                                                   *
+    * updates/upgrades fetched:                                         *
+    *   sudo apt-get update -y                                          *
+    *   sudo apt-get upgrade -y                                         *
+    *                                                                   *
+    * manual configuration changes:                                     *
+    *  sudo apt-get -y remove fake-hwclock                              *
+    *  sudo update-rc.d -f fake-hwclock remove                          *
+    *  sudo systemctl disable fake-hwclock                              *
+    *                                                                   *
+    * utilities added:                                                  *
+    *  sudo apt-get install i2c-tools                                   *
+    *  sudo apt install python3-pip                                     *
+    *  pip3 install smbus                                               *
+    *                                                                   *
+    * python3 packages added:                                           *
+    *  pip3 install tzlocal                                             *
+    *  pip3 install astral                                              *
+    *  pip3 install pause                                               *
+    *                                                                   *
+    *                                                                   *
+    * to check status of the running service execute:                   *
+    *   sudo systemctl status gardenlightsctrl.service                  *                                                            *
+    *                                                                   *
+    * gardepi controller platform release: 1.1                          *	
+    * <C> 2021-2022 andrzej@mazur.info                                  *
+    *                                                                   *
+    *********************************************************************
 
 

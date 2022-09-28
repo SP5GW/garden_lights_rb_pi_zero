@@ -14,11 +14,32 @@ import signal
 import os
 import logging
 import sys
+import configparser
 
-#Set debug to True in order to log all messages!
-LOG_ALL = False
-#Set log_to_file flag to False in order to print logs on stdout
-LOG_TO_FILE = False
+#define default values for parameters defined in solarcalc.ini file.
+defaults_ini = {
+    'city':'Otwock',
+    'country':'Poland',
+    'latitude':'52°06′N',
+    'longitude':'21°15′E',
+    'lights_on_delay':'30',
+    'lights_on_duration':'2',
+    'log_to_file':'False',
+    'log_all':'False'
+   }
+
+
+#build .ini file path - to be stored in same location as source file
+idx=os.path.split(os.path.basename(__file__))[1].find('.')
+file_name_wo_extension=os.path.split(os.path.basename(__file__))[1][:idx]
+ini_file_path = os.path.dirname(os.path.realpath(__file__)) + "/" + file_name_wo_extension + ".ini"
+
+#define .ini file to be parsed
+iconfig_ini_file_path = ini_file_path 
+config = configparser.ConfigParser(defaults_ini)
+config.read(ini_file_path)
+
+print ("Configuration file: ",ini_file_path, " successfuly opened.")
 
 #Global variable informing button handling thread about state of main thread
 thread_exit = False
@@ -34,11 +55,12 @@ relay_ctrl_pin2 = 23 #originally 14
 # Sunset lights on/off status (timer controlled)
 glb_sunset_lights_on = False
 
-# Define default location of your lights control box
-current_location_name = "Otwock"
-current_location_region = "Poland"
-current_location_latitude = "52°06′N"
-current_location_longitude = "21°15′E"
+#Set debug to True in order to log all messages!
+#LOG_ALL = False
+LOG_ALL = config.getboolean('logging','log_all')
+#Set log_to_file flag to False in order to print logs on stdout
+#LOG_TO_FILE = False
+LOG_TO_FILE = config.getboolean('logging','log_to_file')
 
 #create two log file handlers, one for actual log file and another for stdout
 stdout_handler = logging.StreamHandler(sys.stdout)
@@ -63,6 +85,21 @@ if LOG_ALL == True:
     logging.basicConfig(level = logging.DEBUG,format = '%(asctime)s:%(threadName)s:%(filename)s:%(lineno)s:%(levelname)s:%(message)s', handlers=hndls)
 else:
     logging.basicConfig(level = logging.INFO,format = '%(asctime)s:%(threadName)s:%(filename)s:%(lineno)s:%(levelname)s:%(message)s', handlers=hndls)
+
+logging.debug('Loaded logging parameters:')
+logging.debug('      Log All Information Incl. DEBUG logs: %s', LOG_ALL)
+logging.debug('      Log to File: %s', LOG_TO_FILE)
+
+current_location_name = config.get('location','city')
+current_location_region = config.get('location','country')
+current_location_latitude = config.get('location','latitude')
+current_location_longitude = config.get('location','longitude')
+
+logging.debug('Loaded location parameters:')
+logging.debug('      Name: %s', current_location_name)
+logging.debug('      Country: %s', current_location_region)
+logging.debug('      Latitude: %s', current_location_latitude)
+logging.debug('      Longitude: %s', current_location_longitude)
 
 
 def handleSIGTERM(signum, frame):
@@ -210,7 +247,7 @@ while True: #endless loop
 
     #print ("Sun information for: " + current_location_name + "," + current_location_region + "(" + current_location_latitude + "," + current_location_longitude + "), on " + str(next_sunset_datetime_local.strftime("%m/%d/%Y")) + ":") 
 
-    logging.info('Sun information for: %s,%s(%s,%s) on %s:',current_location_name,current_location_region,current_location_latitude,current_location_longitude,str(next_sunset_datetime_local.strftime("%m/%d/%Y")))
+    logging.info('Sun information for: %s, %s(%s,%s) on %s:',current_location_name,current_location_region,current_location_latitude,current_location_longitude,str(next_sunset_datetime_local.strftime("%m/%d/%Y")))
 
     #current_location_sunset = datetime.datetime(2021,6,28,20,20) # for test only
 
@@ -219,9 +256,16 @@ while True: #endless loop
 
 
     logging.info (' ')
+    
+    offset_lights_on_ini = config.getint('timers','lights_on_delay')
+    offset_lights_off_ini = config.getint('timers','lights_on_duration')
+    
+    logging.debug('Loaded Lights timer parameters:')
+    logging.debug('      Lights On Delay: %s min',offset_lights_on_ini )
+    logging.debug('      Lights On Duration: %s h', offset_lights_off_ini)
 
-    time_offset_lights_on = datetime.timedelta(minutes=30) #offset = 30
-    time_offset_lights_off = time_offset_lights_on + datetime.timedelta(hours=2) #offset hours = 2 or 3
+    time_offset_lights_on = datetime.timedelta(minutes=offset_lights_on_ini) #offset = 30
+    time_offset_lights_off = time_offset_lights_on + datetime.timedelta(hours=offset_lights_off_ini) #offset hours = 2 or 3
 
     current_location_lights_on = current_location_sunset + time_offset_lights_on
     current_location_lights_off = current_location_sunset + time_offset_lights_off
@@ -254,7 +298,7 @@ while True: #endless loop
 
 
     if current_datetime_local <= today_midnight_datetime:
-        logging.info('Lights were alrady switched on/off after sunset - making calculations for tommorow')
+        logging.info('Lights were already switched on/off after sunset - making calculations for tommorow')
         next_sunset_datetime_local = current_datetime_local + datetime.timedelta(days=1)
         next_sunset_datetime_local = datetime.datetime.combine(next_sunset_datetime_local.date(),datetime.time(0,5))
         logging.info(  '%s', str(next_sunset_datetime_local))

@@ -31,6 +31,9 @@ relay_ctrl_pin1 = 18
 # Define pin GPIO14 to control relay coil 
 relay_ctrl_pin2 = 23 #originally 14
 
+# Define pin GPIO21 to control buzzer 
+buzzer_ctrl_pin = 21
+
 # Sunset lights on/off status (timer controlled)
 glb_sunset_lights_on = False
 
@@ -162,6 +165,16 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
         shutdown_window = shutdown_window + shutdown_window_inc
         #logging.debug('shutdown_window_inc =%s, shutdown_window = %s',shutdown_window_inc, shutdown_window)
 
+#Define buzzer melody
+def BuzzerSound():
+    GPIO.setup(buzzer_ctrl_pin,GPIO.OUT)
+    for y in range (3):
+        for x in range(3):
+            GPIO.output(buzzer_ctrl_pin,GPIO.HIGH)
+            time.sleep(0.01)
+            GPIO.output(buzzer_ctrl_pin,GPIO.LOW)
+            time.sleep(0.01)
+        time.sleep(0.5)
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -193,8 +206,10 @@ logging.info (' ')
 logging.info ('Platform local time is now: %s', str(current_datetime_local.ctime()))
 logging.info ('Platform universal time is now: %s', str(current_datetime_utc.ctime()))
 
-logging.info (' ')
+'Play a sound to indicate gardenpi is up and booted!'
+BuzzerSound()
 
+logging.info (' ')
 
 while True: #endless loop
 

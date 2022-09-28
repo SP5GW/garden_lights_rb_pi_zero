@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 import time
 
 
-# Define pin GPIO21 to control relay coil 
+# Define pin GPIO21 to control buzzer 
 buzzer_ctrl_pin = 21
 
 GPIO.setmode(GPIO.BCM)

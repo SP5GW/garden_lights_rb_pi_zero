@@ -159,6 +159,9 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
                 if shutdown_window <= (60 / loop_duration): #1min window to turn on/off button 5 times
                     shutdown_window_inc = 1
                     counter_shutdown = counter_shutdown + 1
+                    #Play a sound to indicate gardenpi light switch is toggled within shutdown window
+                    #If number of short beeps is 5 then shutdown will follow
+                    BuzzerSound(1,counter_shutdown)
                 else:
                     shutdown_window_inc = 0
                     shutdown_window = 0
@@ -168,6 +171,8 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
 
                 if counter_shutdown >= 5: #shutdown system if button is pressed 5 times within 1min
                     logging.info('Light switch toggled on/off 5x in 1min - initiating system shutdown !!!')
+                    #Play single long beep to indicate gardenpi is about to shutdown!
+                    BuzzerSound(2,0)
                     counter_shutdown = 0
                     os.system("sudo shutdown -h now")
             else:
@@ -203,11 +208,13 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
         #logging.debug('shutdown_window_inc =%s, shutdown_window = %s',shutdown_window_inc, shutdown_window)
 
 #Define buzzer sound
-def BuzzerSound(SoundType):
+def BuzzerSound(SoundType,Repeat):
+
     GPIO.setup(buzzer_ctrl_pin,GPIO.OUT)
+    
     if (SoundType==1):
-        #Multiple Beeps
-        for y in range (3):
+        #Multiple Short Beeps
+        for y in range (Repeat):
             for x in range(3):
                 GPIO.output(buzzer_ctrl_pin,GPIO.HIGH)
                 time.sleep(0.01)
@@ -215,8 +222,10 @@ def BuzzerSound(SoundType):
                 time.sleep(0.01)
             time.sleep(0.5)
     elif SoundType == 2:
-        #Single Beep
-            for x in range(8):
+        #Single Long Beep
+        #Repeat parameter ignored
+            time.sleep(0.8)
+            for x in range(20):
                 GPIO.output(buzzer_ctrl_pin,GPIO.HIGH)
                 time.sleep(0.01)
                 GPIO.output(buzzer_ctrl_pin,GPIO.LOW)
@@ -255,8 +264,8 @@ logging.info (' ')
 logging.info ('Platform local time is now: %s', str(current_datetime_local.ctime()))
 logging.info ('Platform universal time is now: %s', str(current_datetime_utc.ctime()))
 
-'Play a sound to indicate gardenpi is up and booted!'
-BuzzerSound(1)
+#Play 3 short beeps to indicate gardenpi is up and booted!
+BuzzerSound(1,3)
 
 logging.info (' ')
 

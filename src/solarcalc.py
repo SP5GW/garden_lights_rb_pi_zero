@@ -202,16 +202,28 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
         shutdown_window = shutdown_window + shutdown_window_inc
         #logging.debug('shutdown_window_inc =%s, shutdown_window = %s',shutdown_window_inc, shutdown_window)
 
-#Define buzzer melody
-def BuzzerSound():
+#Define buzzer sound
+def BuzzerSound(SoundType):
     GPIO.setup(buzzer_ctrl_pin,GPIO.OUT)
-    for y in range (3):
-        for x in range(3):
-            GPIO.output(buzzer_ctrl_pin,GPIO.HIGH)
-            time.sleep(0.01)
-            GPIO.output(buzzer_ctrl_pin,GPIO.LOW)
-            time.sleep(0.01)
-        time.sleep(0.5)
+    if (SoundType==1):
+        #Multiple Beeps
+        for y in range (3):
+            for x in range(3):
+                GPIO.output(buzzer_ctrl_pin,GPIO.HIGH)
+                time.sleep(0.01)
+                GPIO.output(buzzer_ctrl_pin,GPIO.LOW)
+                time.sleep(0.01)
+            time.sleep(0.5)
+    elif SoundType == 2:
+        #Single Beep
+            for x in range(8):
+                GPIO.output(buzzer_ctrl_pin,GPIO.HIGH)
+                time.sleep(0.01)
+                GPIO.output(buzzer_ctrl_pin,GPIO.LOW)
+                time.sleep(0.01)
+    else:
+        print('')
+        #Undefined sound
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -244,7 +256,7 @@ logging.info ('Platform local time is now: %s', str(current_datetime_local.ctime
 logging.info ('Platform universal time is now: %s', str(current_datetime_utc.ctime()))
 
 'Play a sound to indicate gardenpi is up and booted!'
-BuzzerSound()
+BuzzerSound(1)
 
 logging.info (' ')
 

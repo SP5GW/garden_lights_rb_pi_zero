@@ -161,6 +161,7 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
                     counter_shutdown = counter_shutdown + 1
                     #Play a sound to indicate gardenpi light switch is toggled within shutdown window
                     #If number of short beeps is 5 then shutdown will follow
+                    print("counter_shutdown=", counter_shutdown)
                     BuzzerSound(1,counter_shutdown)
                 else: 
                     shutdown_window_inc = 0
@@ -169,7 +170,6 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
                     #counter_shutdown = 0
                     counter_shutdown = 1
                     BuzzerSound (1,1)
-                    
                 logging.debug('   >>shutdown_window: %s, loop_duration: %s, shutdown_window_inc: %s, counter_shutdown: %s',str(shutdown_window), str(loop_duration),str(shutdown_window_inc),str(counter_shutdown))  
 
                 if counter_shutdown >= 5: #shutdown system if button is pressed 5 times within 1min
@@ -250,6 +250,15 @@ current_datetime_local = datetime.datetime.now().astimezone()
 current_time_zone = tzlocal.get_localzone().zone
 current_datetime_utc = datetime.datetime.utcnow()
 
+logging.info (' ')
+
+logging.info ('Platform local time is now: %s', str(current_datetime_local.ctime()))
+logging.info ('Platform universal time is now: %s', str(current_datetime_utc.ctime()))
+
+logging.info (' ')
+
+#Play 3 short beeps to indicate gardenpi is up and booted!
+BuzzerSound(1,3)
 
 #Start button handling thread
 GPIO.setmode(GPIO.BCM)
@@ -262,15 +271,6 @@ thread.start()
 
 next_sunset_datetime_local = current_datetime_local
 
-logging.info (' ')
-
-logging.info ('Platform local time is now: %s', str(current_datetime_local.ctime()))
-logging.info ('Platform universal time is now: %s', str(current_datetime_utc.ctime()))
-
-#Play 3 short beeps to indicate gardenpi is up and booted!
-BuzzerSound(1,3)
-
-logging.info (' ')
 
 while True: #endless loop
 

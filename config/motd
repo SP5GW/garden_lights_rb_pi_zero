@@ -45,7 +45,7 @@ permitted by applicable law.
     * to check status of the running service execute:                   *
     *   sudo systemctl status gardenlightsctrl.service                  *                                                            *
     *                                                                   *
-    * gardepi controller platform release: 1.1                          *	
+    * gardepi controller platform release: 2.0                          *	
     * <C> 2021-2022 andrzej@mazur.info                                  *
     *                                                                   *
     *********************************************************************

@@ -162,10 +162,13 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
                     #Play a sound to indicate gardenpi light switch is toggled within shutdown window
                     #If number of short beeps is 5 then shutdown will follow
                     BuzzerSound(1,counter_shutdown)
-                else:
+                else: 
                     shutdown_window_inc = 0
                     shutdown_window = 0
-                    counter_shutdown = 0
+                    #Bug correction
+                    #counter_shutdown = 0
+                    counter_shutdown = 1
+                    BuzzerSound (1,1)
                     
                 logging.debug('   >>shutdown_window: %s, loop_duration: %s, shutdown_window_inc: %s, counter_shutdown: %s',str(shutdown_window), str(loop_duration),str(shutdown_window_inc),str(counter_shutdown))  
 

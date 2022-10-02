@@ -1,0 +1,22 @@
+
+Bill of Materials for Gardenpi Rev 2.0
+
+=============================================================================================================================
+Device Type					Model						Qty	Seller:product code
+=============================================================================================================================
+
+Microcontroller					Raspberry Pi Zero W 512MB RAM - WiFi + BT 4.1	1	Botland:RPI-08330
+Step Up/Down Voltage Regulator 5V 1.5A		Pololu 2836					1	(Botland: PLL-08738)
+RTC Module + battery				DS3231 I2C Pi HAT				1	(Botland: MOD-03790)
+Relay Module, 2 channels, 5V coil		Iduino 2					1	(Botland: OST-14266)
+Active buzzer with generator 5V 12mm								1	(Botland: EAK-00786)
+Schottky diode 40V/3A				1N5822						1
+Blue LED											2
+Bi-Switch with LED (blue)									2
+Bi-Switch with LED (green)									1
+Mono-Switch											1
+Fuse holder											1
+Fuse												1
+Power sockets											4
+LED sockets											2
+SD Card						Scandisk 64G					1

@@ -20,6 +20,8 @@ permitted by applicable law.
     *   /etc/ssh/sshd-banner                                            *
     *   /etc/ssh/sshd_config                                            *
     *   /etc/motd                                                       *
+    *   /home/pi/.bash_aliases                                          *
+    *   /home/pi/bin/gardenpi.sh                                        *
     *   /lib/udev/hwclock-set                                           *
     *                                                                   *
     * updates/upgrades fetched:                                         *
@@ -44,6 +46,8 @@ permitted by applicable law.
     *                                                                   *
     * to check status of the running service execute:                   *
     *   sudo systemctl status gardenlightsctrl.service                  *                                                            *
+    *                                                                   *
+    * to print this message again run command: gardenpi                 *
     *                                                                   *
     * gardepi controller platform release: 2.0                          *	
     * <C> 2021-2022 andrzej@mazur.info                                  *

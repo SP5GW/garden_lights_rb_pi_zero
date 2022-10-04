@@ -1,6 +1,6 @@
 **GardenPi - The Light Controller**
 
-<p float="center">
+<p align="center">
 <img src="./hw/gardenpi_front.jpg" width="350" height="150"/>
 <img src="./hw/gardenpi_internal.jpg" width="350" height="150"/>
 </p>

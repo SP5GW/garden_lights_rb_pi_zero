@@ -68,5 +68,3 @@ All Pi configuration files, which were modified as part of this project are stor
 **Device Operation**
 
 Device does not require maintenance, if GardenPi operates from location where there is no wifi access its RTC can drift so it is desirable to bring it within wifi coverage from time to time. Such behavior can be expected, but was not observed in real life yet.
-
-Comments or Questions can be directed to: andrzej@mazur.info

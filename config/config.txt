@@ -39,7 +39,7 @@
 #arm_freq=800
 
 # Uncomment some or all of these to enable the optional hardware interfaces
-#dtparam=i2c_arm=on
+dtparam=i2c_arm=on
 #dtparam=i2s=on
 #dtparam=spi=on
 
@@ -78,3 +78,12 @@ otg_mode=1
 arm_boost=1
 
 [all]
+
+# Allow ssh over usb
+dtoverlay=dwc2
+
+# Enable RTC clock module 
+dtoverlay=i2c-rtc,ds3231
+
+# Enable UART1 so GPIO14 can be used as LED status indicator for Pi
+enable_uart=1

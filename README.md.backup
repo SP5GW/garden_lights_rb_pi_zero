@@ -29,7 +29,7 @@ GardenPi is a Raspberry Pi Zero based two channel garden light controller, which
 - real time is preserved at device shutdown using RTC module
 - RTC module time is synchronized with network clock as soon as device is connected to LAN via Wi-Fi or USB
 - Device is powered by 12V DC external power supplier (reversed polarity protection is implemented)
-- Controller status is indicated by LED over RST/HLT button (steady/blinking - controller in operation)
+- Controller status is indicated by LED over RST/HLT button (off - )
 
 
 **Design and Build Instructions**

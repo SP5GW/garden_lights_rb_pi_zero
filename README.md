@@ -46,11 +46,11 @@ Pi SW Image preparation process has been documented in the following command log
 
 Service python script, service file and initial configuration file storing service script settings are all located in:
 
-* Source Code Directory: /src
+* Source Code Directory: ./src
 
 All Pi configuration files, which were modified as part of this project are stored in:
 
-* Pi Configuration Files: /config
+* Pi Configuration Files: ./config
 
 
 **Initial Configuration**
@@ -69,4 +69,30 @@ All Pi configuration files, which were modified as part of this project are stor
 
 Device does not require maintenance, if GardenPi operates from location where there is no wifi access its RTC can drift so it is desirable to bring it within wifi coverage from time to time. Such behavior can be expected, but was not observed in real life yet.
 
+**Contributing**
+
+* Fork it!
+* Create your feature branch: git checkout -b my-new-feature
+* Commit your changes: git commit -am 'Add some feature'
+* Push to the branch: git push origin my-new-feature
+* Submit a pull request
+
+**Release History**
+
+* Release 1.0 - October 2021 - basic functionality allowing light control
+* Release 2.0 - October 2022 - new functionality:
+	* device configuration via .ini file, 
+	* buzzer support added, 
+	* bug fixes focusing on stability (handling of shutdown procedure)
+	* gardenpi command and device baner with useful configuration info added
+
+**Planned Functionality**
+
+* External WiFi antenna support
+* WiFi configuration using ini file
+* Buzzer volume control
+
+
 Comments or Questions can be directed to: andrzej@mazur.info
+
+

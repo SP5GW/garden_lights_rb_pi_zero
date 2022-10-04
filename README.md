@@ -1,7 +1,7 @@
 **GardenPi - The Light Controller**
 
-<img src="../../Pictures/gardenpi_front.jpg" width="250" height="100"/>
-<img src="../../Pictures/gardenpi_internal.jpg" width="250" height="100"/>
+<img src="./hw/gardenpi_front.jpg" width="250" height="100"/>
+<img src="./hw/gardenpi_internal.jpg" width="250" height="100"/>
 
 GardenPi is a Raspberry Pi Zero based two channel garden light controller, which includes hardware platform and systemd service written in python. Lights are automatically switched on/off based on calculated sunset time for provided location. Manual lights control is also supported.
 

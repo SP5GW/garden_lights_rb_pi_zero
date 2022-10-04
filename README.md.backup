@@ -43,7 +43,7 @@ HW design has been described in the following files:
 Pi SW Image preparation process has been documented in the following command log file:
 
 * SW Image Preparations command [log](./doc/gardenpi_cmd.txt).
-* Latest stable SW image can be downloaded from [image repository](https://1drv.ms/u/s!AmoGY_QbIutmjDPu6R8zekghUcrf?e=fY6dYW)
+* Latest stable SW image can be downloaded from [link] https://1drv.ms/u/s!AmoGY_QbIutmjDPu6R8zekghUcrf?e=fY6dYW
 
 Service python script, service file and initial configuration file storing service script settings are all located in:
 

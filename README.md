@@ -36,22 +36,22 @@ GardenPi is a Raspberry Pi Zero based two channel garden light controller, which
 
 HW design has been described in the following files:
 
-* Bill of Materials: 	./doc/gardenpi_bom.txt
-* Circuit diagram:		./doc/gardenpi_diagram.pdf
-* HW Photos:				./hw/
+* [Bill of Materials](./docs/gardenpi_bom.txt)
+* [Circuit diagram](./docs/gardenpi_schematics.pdf)
+* [HW Photos](./hw/)
 
 Pi SW Image preparation process has been documented in the following command log file:
 
-* SW Image Preparations command log: ./doc/gardenpi_cmd.log
-* Latest stable SW image can be downloaded from <!-- here -->https://link.com.
+* SW Image Preparations command [log](./doc/gardenpi_cmd.txt).
+* Latest stable SW image can be downloaded from <!-- here -->https://link_todo.com.
 
 Service python script, service file and initial configuration file storing service script settings are all located in:
 
-* Source Code Directory: ./src
+* [Source Code Directory](./src)
 
 All Pi configuration files, which were modified as part of this project are stored in:
 
-* Pi Configuration Files: ./config
+* [Pi Config Directory](./config)
 
 
 **Initial Configuration**

@@ -94,7 +94,7 @@ sudo nano /etc/motd
     *                                                               *
     *                                                               *
     * to check status of the running service execute:               *
-    *   sudo systemctl status gardenlightsctrl.service              *                                                            *
+    *   sudo systemctl status gardenlightsctrl.service              *
     *                                                               *
     * <C> 2021-2022 andrzej@mazur.info                              *
     *                                                               *

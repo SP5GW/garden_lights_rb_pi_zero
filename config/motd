@@ -9,10 +9,25 @@ permitted by applicable law.
 
     *********************************************************************
     *                                                                   *
-    * This pi is running garden light control service.                  *
+    * This pi zero W is running garden light control service.           *
     *   service file: /etc/systemd/system/gardenlightsctrl.service      *
     *   service script: /home/pi/PyScripts/SolarCalc/solarcalc.py       *
     *   configuration file: /home/pi/PyScripts/SolarCalc/solarcalc.ini  *
+    *   metrics file: /home/pi/PyScripts/SolarCalc/solarcalc.prom       *
+    *                                                                   *
+    * GUI for this device is available at: http://this_pi_ip_adr.local  * 
+    * GUI implementation is based on:                                   *                                     
+    *    prometheus:                                                    *
+    *      /home/pi/prometheus/prometheus.yml                           *
+    *      /etc/systemd/system/prometheus.service                       *
+    *    prometheus-node-exporter                                       *
+    *      /var/lib/prometheus/node-exporter/gardenpi.prom              *
+    *      /lib/systemd/system/prometheus-node-exporter.service         *
+    *    grafana                                                        *
+    *     /etc/grafana/grafana.ini                                      *
+    *     /lib/systemd/system/grafana-server.service                    *
+    *    iptables (for port 80 to 3000 redirection)                     *
+    *     /etc/iptables/rules.v4                                        *
     *                                                                   *
     * files modified on this platform:                                  *
     *   /boot/config.txt                                                *
@@ -37,6 +52,14 @@ permitted by applicable law.
     *  sudo apt-get install i2c-tools                                   *
     *  sudo apt install python3-pip                                     *
     *  pip3 install smbus                                               *
+    *  tar xfz prometheus-2.39.1.linux-armv6.tar.gz                     *
+    *  mv prometheus-2.39.1.linux-armv6 /home/pi/prometheus             *
+    *  sudo apt-get install prometheus-node-exporter                    *
+    *  wget https://dl.grafana.com/enterprise/release/grafana- \        *
+    *       enterprise-rpi_9.2.0_armhf.deb                              *
+    *  sudo dpkg -i grafana-enterprise-rpi_9.2.0_armhf.deb              *
+    *  apt-get install iptables-persistent                              *           
+    *                                                                   *
     *                                                                   *
     * python3 packages added:                                           *
     *  pip3 install tzlocal                                             *
@@ -45,11 +68,11 @@ permitted by applicable law.
     *                                                                   *
     *                                                                   *
     * to check status of the running service execute:                   *
-    *   sudo systemctl status gardenlightsctrl.service                  *                                                            *
+    *   sudo systemctl status gardenlightsctrl.service                  *
     *                                                                   *
     * to print this message again run command: gardenpi                 *
     *                                                                   *
-    * gardepi controller platform release: 2.0                          *	
+    * gardepi controller platform release: 3.0                          *	
     * <C> 2021-2022 andrzej@mazur.info                                  *
     *                                                                   *
     *********************************************************************

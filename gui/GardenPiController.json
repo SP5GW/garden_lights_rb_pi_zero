@@ -30,10 +30,16 @@
       "version": ""
     },
     {
+      "type": "panel",
+      "id": "geomap",
+      "name": "Geomap",
+      "version": ""
+    },
+    {
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.1.7"
+      "version": "9.2.0"
     },
     {
       "type": "datasource",
@@ -83,6 +89,147 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "Geographical Location of GardenPi Controller",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 23,
+      "options": {
+        "basemap": {
+          "config": {},
+          "name": "Layer 0",
+          "type": "default"
+        },
+        "controls": {
+          "mouseWheelZoom": false,
+          "showAttribution": false,
+          "showDebug": false,
+          "showMeasure": false,
+          "showScale": false,
+          "showZoom": false
+        },
+        "layers": [
+          {
+            "config": {
+              "showLegend": false,
+              "style": {
+                "color": {
+                  "fixed": "blue"
+                },
+                "opacity": 0.4,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 5,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "img/icons/marker/triangle.svg",
+                  "mode": "fixed"
+                },
+                "text": {
+                  "field": "city",
+                  "fixed": "",
+                  "mode": "field"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 7,
+                  "offsetY": 0,
+                  "textAlign": "left",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "A"
+            },
+            "location": {
+              "gazetteer": "public/gazetteer/countries.json",
+              "geohash": "City",
+              "lookup": "country",
+              "mode": "auto"
+            },
+            "name": "Layer 1",
+            "tooltip": true,
+            "type": "markers"
+          }
+        ],
+        "tooltip": {
+          "mode": "details"
+        },
+        "view": {
+          "allLayers": true,
+          "id": "coords",
+          "lat": 50,
+          "lon": 23,
+          "zoom": 4
+        }
+      },
+      "pluginVersion": "9.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "gardenpi_location{job=\"raspi\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "GardenPi Location",
+      "type": "geomap"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "GardenPi System Time",
       "fieldConfig": {
         "defaults": {
@@ -112,7 +259,7 @@
       "gridPos": {
         "h": 2,
         "w": 4,
-        "x": 0,
+        "x": 8,
         "y": 0
       },
       "id": 9,
@@ -130,7 +277,7 @@
         },
         "textMode": "value"
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -145,74 +292,6 @@
         }
       ],
       "title": "Current Time",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Date of last system restart",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "blue",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "dateTimeAsLocal"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 4,
-        "x": 4,
-        "y": 0
-      },
-      "id": 8,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "/^\\{instance=\"localhost:9100\", job=\"raspi\"\\}$/",
-          "values": false
-        },
-        "textMode": "value"
-      },
-      "pluginVersion": "9.1.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "builder",
-          "expr": "node_boot_time_seconds{job=\"raspi\", instance=\"localhost:9100\"} * 1000",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Up since:",
       "type": "stat"
     },
     {
@@ -260,10 +339,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 4,
-        "x": 0,
-        "y": 2
+        "x": 12,
+        "y": 0
       },
       "id": 6,
       "options": {
@@ -280,7 +359,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -357,10 +436,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 4,
-        "x": 4,
-        "y": 2
+        "x": 16,
+        "y": 0
       },
       "id": 2,
       "options": {
@@ -377,7 +456,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -458,6 +537,74 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "Date of last system restart",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "dateTimeAsLocal"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 8,
+        "y": 2
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^\\{instance=\"localhost:9100\", job=\"raspi\"\\}$/",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "9.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "builder",
+          "expr": "node_boot_time_seconds{job=\"raspi\", instance=\"localhost:9100\"} * 1000",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Up since:",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "GardenPi CPU Temperature",
       "fieldConfig": {
         "defaults": {
@@ -465,13 +612,7 @@
             "mode": "thresholds"
           },
           "decimals": 0,
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "Go to ${__all_variables}",
-              "url": "d/RayfGVAnz/raspberry-pi-details?${__all_variables}"
-            }
-          ],
+          "links": [],
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -505,10 +646,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 4,
+        "h": 4,
+        "w": 3,
         "x": 0,
-        "y": 5
+        "y": 4
       },
       "id": 11,
       "options": {
@@ -524,7 +665,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -557,13 +698,7 @@
             "mode": "thresholds"
           },
           "decimals": 2,
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "Go to ${__all_variables}",
-              "url": "d/RayfGVAnz/raspberry-pi-details?${__all_variables}"
-            }
-          ],
+          "links": [],
           "mappings": [],
           "max": 4,
           "min": 0,
@@ -597,10 +732,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 4,
-        "y": 5
+        "h": 4,
+        "w": 3,
+        "x": 3,
+        "y": 4
       },
       "id": 13,
       "options": {
@@ -618,7 +753,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -650,13 +785,7 @@
             "mode": "thresholds"
           },
           "decimals": 0,
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "Go to ${__all_variables}",
-              "url": "d/RayfGVAnz/raspberry-pi-details?${__all_variables}"
-            }
-          ],
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -672,10 +801,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 0,
-        "y": 10
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 4
       },
       "id": 17,
       "options": {
@@ -693,7 +822,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "repeat": "mountpoint",
       "repeatDirection": "h",
       "targets": [
@@ -771,13 +900,7 @@
             "mode": "thresholds"
           },
           "decimals": 0,
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "Go to ${__all_variables}",
-              "url": "d/RayfGVAnz/raspberry-pi-details?${__all_variables}"
-            }
-          ],
+          "links": [],
           "mappings": [],
           "max": 1,
           "min": 0,
@@ -807,10 +930,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 4,
-        "x": 4,
-        "y": 10
+        "x": 9,
+        "y": 4
       },
       "id": 15,
       "options": {
@@ -826,7 +949,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "repeatDirection": "h",
       "targets": [
         {
@@ -853,6 +976,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "Total RAM Memory Installed in the system.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -874,10 +998,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 0,
-        "y": 15
+        "h": 4,
+        "w": 3,
+        "x": 13,
+        "y": 4
       },
       "id": 19,
       "options": {
@@ -895,7 +1019,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -925,6 +1049,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "Total Available RAM Memory",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -945,10 +1070,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 4,
-        "x": 4,
-        "y": 15
+        "x": 16,
+        "y": 4
       },
       "id": 21,
       "options": {
@@ -966,7 +1091,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.7",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -995,7 +1120,11 @@
   "refresh": "5s",
   "schemaVersion": 37,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "gardenpi",
+    "raspberry",
+    "prometheus"
+  ],
   "templating": {
     "list": [
       {
@@ -1019,6 +1148,26 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Otwock",
+          "value": "Otwock"
+        },
+        "description": "GardenPi Location",
+        "hide": 2,
+        "name": "City",
+        "options": [
+          {
+            "selected": true,
+            "text": "Otwock",
+            "value": "Otwock"
+          }
+        ],
+        "query": "Otwock",
+        "skipUrlSync": false,
+        "type": "textbox"
       }
     ]
   },
@@ -1026,10 +1175,15 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s"
+    ]
+  },
   "timezone": "",
   "title": "GardenPi Controller",
   "uid": "Hz5oLMWRz",
-  "version": 52,
+  "version": 77,
   "weekStart": ""
 }

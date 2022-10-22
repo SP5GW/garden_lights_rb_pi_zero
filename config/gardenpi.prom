@@ -1,0 +1,4 @@
+# HELP gardenpi_lights_state Lights on/off indicator.
+# TYPE gardenpi_lights_state gauge
+gardenpi_lights_state 1
+

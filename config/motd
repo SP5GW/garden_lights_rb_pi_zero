@@ -38,6 +38,8 @@ permitted by applicable law.
     *   /home/pi/.bash_aliases                                          *
     *   /home/pi/bin/gardenpi.sh                                        *
     *   /lib/udev/hwclock-set                                           *
+    *   /home/pi/prometheus/prometheus.yml                              *
+    *   /etc/iptables/rules.v4                                          *
     *                                                                   *
     * updates/upgrades fetched:                                         *
     *   sudo apt-get update -y                                          *
@@ -60,15 +62,16 @@ permitted by applicable law.
     *  sudo dpkg -i grafana-enterprise-rpi_9.2.0_armhf.deb              *
     *  apt-get install iptables-persistent                              *           
     *                                                                   *
-    *                                                                   *
     * python3 packages added:                                           *
     *  pip3 install tzlocal                                             *
     *  pip3 install astral                                              *
     *  pip3 install pause                                               *
     *                                                                   *
-    *                                                                   *
     * to check status of the running service execute:                   *
-    *   sudo systemctl status gardenlightsctrl.service                  *
+    *   systemctl status gardenlightsctrl.service                       *
+    *   systemctl status prometheus-node-exporter.service               * 
+    *   systemctl status prometheus.service                             *
+    *   systemctl status grafana-server.service                         *
     *                                                                   *
     * to print this message again run command: gardenpi                 *
     *                                                                   *

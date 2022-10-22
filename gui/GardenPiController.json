@@ -52,6 +52,12 @@
       "id": "stat",
       "name": "Stat",
       "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
     }
   ],
   "annotations": {
@@ -223,6 +229,7 @@
         }
       ],
       "title": "GardenPi Location",
+      "transparent": true,
       "type": "geomap"
     },
     {
@@ -292,6 +299,7 @@
         }
       ],
       "title": "Current Time",
+      "transparent": true,
       "type": "stat"
     },
     {
@@ -374,6 +382,7 @@
         }
       ],
       "title": "Lights Status",
+      "transparent": true,
       "type": "stat"
     },
     {
@@ -530,6 +539,7 @@
         }
       ],
       "title": "GardenLights Application Status",
+      "transparent": true,
       "type": "stat"
     },
     {
@@ -598,6 +608,7 @@
         }
       ],
       "title": "Up since:",
+      "transparent": true,
       "type": "stat"
     },
     {
@@ -1042,6 +1053,7 @@
           "options": {}
         }
       ],
+      "transparent": true,
       "type": "stat"
     },
     {
@@ -1114,7 +1126,33 @@
           "options": {}
         }
       ],
+      "transparent": true,
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 20,
+        "x": 0,
+        "y": 8
+      },
+      "id": 25,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<font color=\"#708090\"> Please observe that time information fetched from the controller can be delayed by up to 5min. <br>\nGardenPi controller version 3.0 released on October 2022. Questions or Requests can be sent to: \n<a href=\"andrzej@mazur.info\"> andrzej@mazur.info </a> </font>",
+        "mode": "html"
+      },
+      "pluginVersion": "9.2.0",
+      "transparent": true,
+      "type": "text"
     }
   ],
   "refresh": "5s",
@@ -1184,6 +1222,6 @@
   "timezone": "",
   "title": "GardenPi Controller",
   "uid": "Hz5oLMWRz",
-  "version": 77,
+  "version": 5,
   "weekStart": ""
 }

@@ -98,14 +98,13 @@ GardenPi Dashboard:
 	* bug fixes focusing on stability (handling of shutdown procedure)
 	* gardenpi command and device baner with useful configuration info added
 * Release 3.0 - October 2022 - new functionality:
-    * Grafana/Prometheus based GUI added
+    * Grafana/Prometheus based GUI
 
 **Planned Functionality**
 
-* Buzzer volume control
 * External WiFi antenna support
 * WiFi configuration using ini file
-
+* Buzzer volume control
 
 
 Comments or Questions can be directed to: andrzej@mazur.info

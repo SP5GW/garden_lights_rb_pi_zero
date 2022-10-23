@@ -5,4 +5,3 @@ gardenpi_lights_state 1
 # HELP gardenpi_location Information about geographical location of gardenpi controller
 # TYPE gardenpi_location gauge
 gardenpi_location{country="Poland",city="Otwock",latitude="52",longitude="21"} 0
-

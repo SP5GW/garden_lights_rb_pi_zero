@@ -96,11 +96,11 @@ logging.debug('      Log to File: %s', LOG_TO_FILE)
 #build .prom file path - to be stored in same location as source file
 idx=os.path.split(os.path.basename(__file__))[1].find('.')
 file_name_wo_extension=os.path.split(os.path.basename(__file__))[1][:idx]
-prom_file_path = os.path.dirname(os.path.realpath(__file__)) + "/" + file_name_wo_extension + ".prom"
+glb_prom_file_path = os.path.dirname(os.path.realpath(__file__)) + "/" + file_name_wo_extension + ".prom"
 
 #prom_file_path is dynamically linked to:/var/lib/prometheus/node-exporter/gardenpi.prom
 #node exporter's text file collector
-logging.info('Prometheus node exporters textfile collector path: %s', prom_file_path)
+logging.info('Prometheus node exporters textfile collector path: %s', glb_prom_file_path)
 
 current_location_name = config.get('location','city')
 current_location_region = config.get('location','country')
@@ -131,6 +131,7 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
     global relay_ctrl_pin1
     global relay_ctrl_pin2
     global glb_sunset_lights_on
+    global glb_prom_file_path
     button_1 = False
     button_1_old = False
     loop_duration = 0.1 #in seconds
@@ -140,6 +141,8 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
     counter_shutdown = 0 
     shutdown_window = 0
     shutdown_window_inc = 0
+    lights_on = False
+    lights_on_old = False
     
     logging.info('Starting Button Handling Thread!')
     while (True):
@@ -196,9 +199,11 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
         if glb_sunset_lights_on == True or button_1 == True:
             #Turn on relay 1
             GPIO.output(relay_ctrl_pin1,GPIO.LOW)
+            lights_on = True
         else:
             #Turn off relay 1
-            GPIO.output(relay_ctrl_pin1,GPIO.HIGH) 
+            GPIO.output(relay_ctrl_pin1,GPIO.HIGH)
+            lights_on = False
          
         if glb_sunset_lights_on == True and counter_relay2_on_delay >= 100:
             #Turn on relay 2
@@ -219,6 +224,16 @@ def ButtonHandlingThread(button1_gpio_ctrl_pin):
 
         shutdown_window = shutdown_window + shutdown_window_inc
         #logging.debug('shutdown_window_inc =%s, shutdown_window = %s',shutdown_window_inc, shutdown_window)
+        
+        if lights_on == True and lights_on_old == False:
+            # lights have been switched on
+            PromMetrixUpdateLightsState(glb_prom_file_path, 1)
+            lights_on_old = True
+        elif lights_on == False and lights_on_old == True:
+            # lights have been switched off
+            PromMetrixUpdateLightsState(glb_prom_file_path, 0)
+            lights_on_old = False
+            
 
 #Define buzzer sound
 def BuzzerSound(SoundType,Repeat):
@@ -247,13 +262,68 @@ def BuzzerSound(SoundType,Repeat):
         print('')
         #Undefined sound
         
-# Create or update Prometheus node exporter's textfile collector file
-def PromMetrixUpdate(prom_file_p, metrics, value): 
+# Set Values in Prometheus node exporter's text collector file
+def PromMetrixSet(prom_file_p, loc_country, loc_city, loc_lat, loc_lon, lights_state): 
+#It is assumed that PromMetrixSetLocation is always called prior to
+#PromMetrixUpdate function
+    
+    locstr = "gardenpi_location{country=\"%s\",city=\"%s\",latitude=\"%s\",longitude=\"%s\"} 0\n" % (loc_country, loc_city, loc_lat, loc_lon)
+    
+    if os.path.exists(prom_file_p):
+        #gardenpi_location{country="Poland",city="Otwock",latitude="52",longitude="21"} 0
+        #gardenpi_lights_state ligths_state
+        logging.debug('Prometheus node exporters textfile already exist - modifying it with:')
+        logging.debug('   gardenpi_lights_state %s', lights_state)
+        logging.debug('   %s', locstr)
 
+        prom_file = open(prom_file_p,'r')
+        filedata = prom_file.readlines()
+        prom_file.close()
+    
+        prom_file = open(prom_file_p,'w')
+
+        filedata[6] = locstr
+
+        if lights_state == 0:
+            #replace value 0 with 1
+            filedata[2] = "gardenpi_lights_state 1\n"
+        else:
+            #replace value 1 with 0
+            filedata[2] = "gardenpi_lights_state 0\n"
+            
+        prom_file.writelines(filedata)
+        prom_file.close()
+    
+    else:
+        logging.debug('Prometheus node exporters textfile does not exist - creating it with:')
+        logging.debug('   gardenpi_lights_state %s', lights_state)
+        logging.debug('   %s', locstr)
+
+        prom_file = open(prom_file_p,'w')
+        prom_file.write('# HELP gardenpi_lights_state Lights on/off indicator.\n')
+        prom_file.write('# TYPE gardenpi_lights_state gauge\n')
+
+        if lights_state  == 0:
+            prom_file.write('gardenpi_lights_state 0\n')
+        else:
+            prom_file.write('gardenpi_lights_state 1\n')
+            
+        prom_file.write('\n')
+        
+        prom_file.write('# HELP gardenpi_location Information about geographical location of gardenpi controller\n')
+        prom_file.write('# TYPE gardenpi_location gauge\n')
+        prom_file.write(locstr)
+        
+        prom_file.close()
+
+# Update Light State value in Prometheus node exporter's collector file
+def PromMetrixUpdateLightsState(prom_file_p, value): 
+#It is assumed that PromMetrixSetLocation is always called prior to this function!
+#i.e. prom_file must already exist before this function is called 
     if os.path.exists(prom_file_p):
         
         logging.debug('Prometheus node exporters textfile already exist - modifying it with:')
-        logging.debug('   metrics: %s, value: %s', metrics, value)
+        logging.debug('   gardenpi_lights_state %s', value)
 
         prom_file = open(prom_file_p,'r')
         filedata = prom_file.read()
@@ -272,7 +342,8 @@ def PromMetrixUpdate(prom_file_p, metrics, value):
     
     else:
         logging.debug('Prometheus node exporters textfile does not exist - creating it with:')
-        logging.debug('   metrics: %s, value: %s', metrics, value)
+        logging.debug('   gardenpi_lights_state %s', value)
+
         prom_file = open(prom_file_p,'w')
         prom_file.write('# HELP gardenpi_lights_state Lights on/off indicator.\n')
         prom_file.write('# TYPE gardenpi_lights_state gauge\n')
@@ -307,8 +378,9 @@ logging.info (' ')
 #Play 3 short beeps to indicate gardenpi is up and booted!
 BuzzerSound(1,3)
 
-#Reflect that lights are initially set to off
-PromMetrixUpdate(prom_file_path, 'gardenpi_lights_state', 0)
+
+#Report location and initial lights status 
+PromMetrixSet(glb_prom_file_path, current_location_region, current_location_name, current_location_latitude.split("°")[0], current_location_longitude.split("°")[0], (int)(glb_sunset_lights_on))
 
 #Start button handling thread
 GPIO.setmode(GPIO.BCM)
@@ -368,11 +440,9 @@ while True: #endless loop
     pause.until(current_location_lights_on)
     glb_sunset_lights_on = True
     logging.info('Lights has been switched on!')
-    PromMetrixUpdate(prom_file_path, 'gardenpi_lights_state', 1)
     pause.until(current_location_lights_off)
     glb_sunset_lights_on = False
     logging.info('Lights has been switched off!')
-    PromMetrixUpdate(prom_file_path, 'gardenpi_lights_state', 0)
     logging.info(' ')
 
     #midnight datetime calculated for the day when last switch on/off cycle started at

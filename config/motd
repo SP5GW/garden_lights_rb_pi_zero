@@ -15,6 +15,9 @@ permitted by applicable law.
     *   configuration file: /home/pi/PyScripts/SolarCalc/solarcalc.ini  *
     *   metrics file: /home/pi/PyScripts/SolarCalc/solarcalc.prom       *
     *                                                                   *
+    * gardenpi command implemented in:                                  *
+    *   /home/pi/.bash_aliases                                          *
+    *                                                                   *
     * GUI for this device is available at: http://this_pi_ip_adr.local  * 
     * GUI implementation is based on:                                   *                                     
     *    prometheus:                                                    *
@@ -28,6 +31,12 @@ permitted by applicable law.
     *     /lib/systemd/system/grafana-server.service                    *
     *    iptables (for port 80 to 3000 redirection)                     *
     *     /etc/iptables/rules.v4                                        *
+    *                                                                   *
+    *  links:                                                           *
+    *    sudo ln ./solarcalc.prom \                                     *
+    *            /var/lib/prometheus/node-exporter/gardenpi.prom        *
+    *    created from /home/pi/.bash_aliases:                           *
+    *    ln -s $HOME/bin/.gardenpi.sh $HOME/bin/gardenpi                *
     *                                                                   *
     * files modified on this platform:                                  *
     *   /boot/config.txt                                                *

@@ -286,10 +286,10 @@ def PromMetrixSet(prom_file_p, loc_country, loc_city, loc_lat, loc_lon, lights_s
 
         if lights_state == 0:
             #replace value 0 with 1
-            filedata[2] = "gardenpi_lights_state 1\n"
+            filedata[2] = "gardenpi_lights_state 0\n"
         else:
             #replace value 1 with 0
-            filedata[2] = "gardenpi_lights_state 0\n"
+            filedata[2] = "gardenpi_lights_state 1\n"
             
         prom_file.writelines(filedata)
         prom_file.close()

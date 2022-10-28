@@ -16,7 +16,7 @@ permitted by applicable law.
     *   metrics file: /home/pi/PyScripts/SolarCalc/solarcalc.prom       *
     *                                                                   *
     * gardenpi command implemented in:                                  *
-    *   /home/pi/.bash_aliases                                          *
+    *   /home/pi/PyScripts/SolarCalc/test/gardenpi.sh                   *
     *                                                                   *
     * GUI for this device is available at: http://this_pi_ip_adr.local  * 
     * GUI implementation is based on:                                   *                                     
@@ -35,8 +35,8 @@ permitted by applicable law.
     *  links:                                                           *
     *    sudo ln ./solarcalc.prom \                                     *
     *            /var/lib/prometheus/node-exporter/gardenpi.prom        *
-    *    created from /home/pi/.bash_aliases:                           *
-    *    ln -s $HOME/bin/.gardenpi.sh $HOME/bin/gardenpi                *
+    *    sudo ln -s /home/pi/PyScripts/SolarCalc/test/gardenpi.sh \     *
+    *            /usr/sbin/gardenpi                                     *
     *                                                                   *
     * files modified on this platform:                                  *
     *   /boot/config.txt                                                *
@@ -44,7 +44,6 @@ permitted by applicable law.
     *   /etc/ssh/sshd-banner                                            *
     *   /etc/ssh/sshd_config                                            *
     *   /etc/motd                                                       *
-    *   /home/pi/.bash_aliases                                          *
     *   /home/pi/bin/gardenpi.sh                                        *
     *   /lib/udev/hwclock-set                                           *
     *   /home/pi/prometheus/prometheus.yml                              *
@@ -82,9 +81,11 @@ permitted by applicable law.
     *   systemctl status prometheus.service                             *
     *   systemctl status grafana-server.service                         *
     *                                                                   *
-    * to print this message again run command: gardenpi                 *
+    * to print this message again or test gardenpi device,  run         *
+    * command: gardenpi or gardenpi --help to check all available       * 
+    * options.                                                          *
     *                                                                   *
-    * gardepi controller platform release: 3.0                          *	
+    * gardepi controller platform release: 4.0                          *	
     * <C> 2021-2022 andrzej@mazur.info                                  *
     *                                                                   *
     *********************************************************************

@@ -33,6 +33,12 @@
 
 function SelfTest {
 
+if [ "$(id -u)" -ne 0 ]; then
+        echo "Running gardenpi selftest requires root privilages!"
+        echo "use: sudo gardenpi --test  instead..."
+  exit
+fi
+
 echo "Starting GardenPi Controller self test..."
 echo "During test execution gardenlightctrl service will be stopped"
 
@@ -226,7 +232,6 @@ fi
 echo " "
 
 systemctl status gardenlightsctrl.service 2>&1 | grep 'active (running)' 1> /dev/null 2> /dev/null 
-#systemctl status NetworkManager-dispatcher.service 2>&1 | grep 'active (running)' 1> /dev/null 2> /dev/null
 
 if [ $? -eq 0 ]
 then
@@ -247,18 +252,12 @@ else
         echo "Please check documentation for troubleshooting tips."
 fi
 
-echo "exiting" $0 " script..."
+echo "exiting gardenpi command..."
 
 } #end of selftest function
 
 
 ####Main body of the script###
-
-if [ "$(id -u)" -ne 0 ]; then
-	echo "Running gardenpi selftest requires root privilages!"
-	echo "use: $"$0" instead..."
-  exit
-fi
 
 #global flags
 flag_verbose=0
@@ -268,7 +267,7 @@ while [ ! $# -eq 0 ]
 do
         case "$1" in
                 --version | -V)
-                        echo "gardenpi version 3.0"
+                        echo "gardenpi version 4.0"
                         exit
                         ;;
                 --help | -h)
@@ -307,4 +306,4 @@ if [ $flag_selftest -eq 1 ]; then
 	exit
 fi
 
-flag_selftestcat /etc/motd
+cat /etc/motd

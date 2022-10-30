@@ -1,6 +1,4 @@
-
-
-Bill of Materials for Gardenpi Rev 2.0
+Bill of Materials for Gardenpi Rev 4.0
 
 =============================================================================================================================
 Device Type					Model						Qty	Seller:product code

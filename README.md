@@ -81,6 +81,10 @@ GardenPi Dashboard:
 <img src="./gui/GardenPiController.png" width="600" height="150"/>
 </p>
 
+**gardenpi command**
+When connected to the terminal window over **ssh (user: pi@gardenpi.local, pwd: raspberry)**, it is possible to execute gardenpi command, which offers basic information about controller configuration.
+To execute device selftest execute: **sudo gardenpi --test**
+
 **Contributing**
 
 * Fork it!
@@ -99,10 +103,12 @@ GardenPi Dashboard:
 	* gardenpi command and device baner with useful configuration info added
 * Release 3.0 - October 2022 - new functionality:
     * Grafana/Prometheus based GUI added
-
+* Release 4.0 - October 2022 - new functionality:
+	* 	buzzer volume control added
+	* 	gardenpi command enhanced with device self-test routine
+	
 **Planned Functionality**
 
-* Buzzer volume control
 * External WiFi antenna support
 * WiFi configuration using ini file
 

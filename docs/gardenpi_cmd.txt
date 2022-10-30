@@ -142,3 +142,5 @@ pip3 install pause
 sudo systemctl start gardenlightsctrl.service
 sudo systemctl enable gardenlightsctrl.service
 sudo systemctl status gardenlightsctrl.service
+
+#to setup a gui support refer to manual: gardenpi_gui.md.

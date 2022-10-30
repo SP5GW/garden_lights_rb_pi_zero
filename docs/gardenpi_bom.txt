@@ -24,3 +24,15 @@ SD Card						Scandisk 64G					1
 Black Chassie 148x250x90mm			Kradex Z15					1	Botland: KDX-05774
 Radiators for Pi CPU				unspecified					1	Botland: MOD-09871
 Accessories Solder-able Breadboard		SparkFun PRT-12070				1	Mouser: 474-PRT-12070
+Resistor					1k						1
+Resistor					10k						1
+Resistor					220						1
+Resistor					330						1
+Resistor Trimmer				1k						1
+Resistor Variable				1k, A (logarythmic) 				1
+Transistor NPN					2N2222						1
+Knob												1
+LED						3mm, blue					2
+Round Rocker SPST Toggle Switch			DC 12V 20A,ON/OFF,Blue LED, fits 20,5mm hole	2
+Round Rocker SPST Toggle Switch			DC 12V 20A,ON/OFF,Green LED, fits 20,5mm hole	1
+					

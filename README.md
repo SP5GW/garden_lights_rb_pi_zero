@@ -31,6 +31,8 @@ GardenPi is a Raspberry Pi Zero based two channel garden light controller, which
 - Device is powered by 12V DC external power supplier (reversed polarity protection is implemented)
 - Controller status is indicated by LED over RST/HLT button (steady/blinking - controller in operation)
 - Grafana based simple GUI (dashboard) is available at http://gardenpi.local
+- Simple unit diagnostics can be obtained by running command sudo gardenpi --test
+- Buzzer volume can be controlled with potentiometer Buzz. Vol.
 
 
 **Design and Build Instructions**
@@ -111,6 +113,7 @@ To execute device selftest execute: **sudo gardenpi --test**
 
 * External WiFi antenna support
 * WiFi configuration using ini file
+* Power source indicator (solar vs. power supply)
 
 
 

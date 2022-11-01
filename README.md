@@ -16,7 +16,7 @@ GardenPi is a Raspberry Pi Zero based two channel garden light controller, which
 - both channels are switched on based on automatically calculated sunset time + predefined delay period
 - main channel can be turned on with external on/off door switch as well
 - configurable offset period controls delay between activation of main and secondary channel
-- period when lights remain turned on can be configured
+- period when lights remain turned on can be configured separately for winter and summer time
 - controller can be restarted by pressing Reset button
 - controller can be shut down by toggling 5x the door switch within 1min interval
 - door switch toggles are indicated by a beep.
@@ -108,6 +108,10 @@ To execute device selftest execute: **sudo gardenpi --test**
 * Release 4.0 - October 2022 - new functionality:
 	* 	buzzer volume control added
 	* 	gardenpi command enhanced with device self-test routine
+* Release 4.1 - November 2022 - new functionality and bug fixes:
+	- possibility to set different lights-on durations for winter and summer times added
+	* 	bug fix: depreciated zone function replaced in tzlocal with get_localtz_name() function call
+	* 	bug fix: time presission correted in some info traces
 	
 **Planned Functionality**
 

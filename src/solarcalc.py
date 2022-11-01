@@ -23,7 +23,8 @@ defaults_ini = {
     'latitude':'52°06′N',
     'longitude':'21°15′E',
     'lights_on_delay':'30',
-    'lights_on_duration':'2',
+    'lights_on_duration_summer':'2',
+    'lights_on_duration_winter':'4',
     'log_to_file':'False',
     'log_all':'False'
    }
@@ -424,14 +425,24 @@ while True: #endless loop
     logging.info (' ')
     
     offset_lights_on_ini = config.getint('timers','lights_on_delay')
-    offset_lights_off_ini = config.getint('timers','lights_on_duration')
+    
+    #offset_lights_off_ini = config.getint('timers','lights_on_duration')
+    offset_lights_off_summer_ini = config.getint('timers','lights_on_duration_summer')
+    offset_lights_off_winter_ini = config.getint('timers','lights_on_duration_winter')
+
+    if (time.localtime().tm_isdst ==0):
+        #DST not in the effect, use winter time lights-on duration
+        offset_lights_off = offset_lights_off_winter_ini
+    else:
+        #DST not in the effect, use winter time lights-on duration
+        offset_lights_off = offset_lights_off_summer_ini
     
     logging.debug('Loaded Lights timer parameters:')
     logging.debug('      Lights On Delay: %s min',offset_lights_on_ini )
-    logging.debug('      Lights On Duration: %s h', offset_lights_off_ini)
+    logging.debug('      Lights On Duration: %s h', offset_lights_off)
 
     time_offset_lights_on = datetime.timedelta(minutes=offset_lights_on_ini) #offset = 30
-    time_offset_lights_off = time_offset_lights_on + datetime.timedelta(hours=offset_lights_off_ini) #offset hours = 2 or 3
+    time_offset_lights_off = time_offset_lights_on + datetime.timedelta(hours=offset_lights_off)
 
     current_location_lights_on = current_location_sunset + time_offset_lights_on
     current_location_lights_off = current_location_sunset + time_offset_lights_off

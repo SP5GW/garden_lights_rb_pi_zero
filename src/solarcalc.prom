@@ -1,6 +1,6 @@
 # HELP gardenpi_lights_state Lights on/off indicator.
 # TYPE gardenpi_lights_state gauge
-gardenpi_lights_state 0
+gardenpi_lights_state 1
 
 # HELP gardenpi_location Information about geographical location of gardenpi controller
 # TYPE gardenpi_location gauge

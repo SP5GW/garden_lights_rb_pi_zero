@@ -365,7 +365,12 @@ GPIO.output(relay_ctrl_pin2,GPIO.HIGH) #turn off the relay2
 signal.signal(signal.SIGTERM, handleSIGTERM)
 
 current_datetime_local = datetime.datetime.now().astimezone()
-current_time_zone = tzlocal.get_localzone().zone
+
+# Issue corrected use of depreciated zone function
+# depreciated tzlocal.get_localzone().zone changed to tzlocal.get_localzone_name()
+#current_time_zone = tzlocal.get_localzone().zone
+current_time_zone = tzlocal.get_localzone_name()
+
 current_datetime_utc = datetime.datetime.utcnow()
 
 logging.info (' ')
@@ -452,9 +457,13 @@ while True: #endless loop
     #current date refreshed after last switch on/off cycle has finished
     current_datetime_local = datetime.datetime.now().astimezone()
     
-    logging.info('current_datetime_local =  %s',str(current_datetime_local))
-    logging.info('today_midnight_datetime =  %s',str(today_midnight_datetime))
-    logging.info('current_location_lights_off = %s',str(current_location_lights_off))
+    #issue corrected time printed with too high precission
+    #logging.info('current_datetime_local =  %s',str(current_datetime_local))
+    #logging.info('today_midnight_datetime =  %s',str(today_midnight_datetime))
+    #logging.info('current_location_lights_off = %s',str(current_location_lights_off))
+    logging.info('current_datetime_local =  %s',current_datetime_local.ctime())
+    logging.info('today_midnight_datetime =  %s',today_midnight_datetime.ctime())
+    logging.info('current_location_lights_off = %s',current_location_lights_off.ctime())
 
 
     if current_datetime_local <= today_midnight_datetime:

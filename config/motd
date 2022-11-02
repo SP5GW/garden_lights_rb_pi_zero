@@ -44,7 +44,6 @@ permitted by applicable law.
     *   /etc/ssh/sshd-banner                                            *
     *   /etc/ssh/sshd_config                                            *
     *   /etc/motd                                                       *
-    *   /home/pi/bin/gardenpi.sh                                        *
     *   /lib/udev/hwclock-set                                           *
     *   /home/pi/prometheus/prometheus.yml                              *
     *   /etc/iptables/rules.v4                                          *

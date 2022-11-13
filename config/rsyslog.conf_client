@@ -10,7 +10,9 @@
 
 module(load="imuxsock") # provides support for local system logging
 module(load="imklog")   # provides kernel logging support
+module(load="omkafka")   # lets you send to Kafka
 #module(load="immark")  # provides --MARK-- message capability
+#module(load="imfile")    # if you want to tail files
 
 # provides UDP syslog reception
 #module(load="imudp")
@@ -49,6 +51,31 @@ $WorkDirectory /var/spool/rsyslog
 # Include all config files in /etc/rsyslog.d/
 #
 $IncludeConfig /etc/rsyslog.d/*.conf
+
+#
+# Define jason template for use by kafka
+#
+
+template(name="ls_json" type="list" option.json="on")
+	{
+	  constant(value="{") 
+	  constant(value="\"@timestamp\":\"")
+	  property(name="timereported" dateFormat="rfc3339")
+	  constant(value="\",\"@version\":\"1")
+	  constant(value="\",\"message\":\"") 
+	  property(name="msg")
+	  constant(value="\",\"host\":\"") 
+	  property(name="hostname")
+	  constant(value="\",\"severity\":\"")
+	  property(name="syslogseverity-text")
+	  constant(value="\",\"facility\":\"")
+	  property(name="syslogfacility-text")
+	  constant(value="\",\"programname\":\"")
+	  property(name="programname")
+	  constant(value="\",\"procid\":\"") 
+	  property(name="procid")
+	  constant(value="\"}\n") 
+	} 
 
 
 ###############
@@ -91,4 +118,16 @@ mail.err			/var/log/mail.err
 #
 *.emerg				:omusrmsg:*
 
+#
+# Publish logs already stored locally over kafka
+#
+
+#$ModLoad omkafka
+action(type="omkafka" topic="gardenpi" broker=["192.168.1.107:9092"] template="ls_json")
+
+
+#
+# Log fowarding rule, use udp to forward logs 
+# to syslog server, which were earlier stored locally
+# 
 *.* @192.168.1.107:514

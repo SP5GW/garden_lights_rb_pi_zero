@@ -43,7 +43,7 @@ Platform is powered by:
 - Grafana based simple GUI (dashboard) is available at http://gardenpi.local
 - Simple unit diagnostics can be obtained by running command sudo gardenpi --test
 - Buzzer volume can be controlled with potentiometer Buzz. Vol.
-- Controller's syslog messages are forwarded to rsyslog server and kafka broker
+- Controller syslog messages are available remotely over rsyslog and kafka bus (topic: gardenpi)
 
 
 **Design and Build Instructions**

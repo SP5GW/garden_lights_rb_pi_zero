@@ -32,6 +32,13 @@ permitted by applicable law.
     *    iptables (for port 80 to 3000 redirection)                     *
     *     /etc/iptables/rules.v4                                        *
     *                                                                   *
+    * System logs are exported using rsyslog service with enabled       *
+    * kafka support:                                                    *
+    *   /etc/rsyslog.conf                                               *
+    * Logs are sent to:                                                 *
+    *  syslog: UDP port 514 and remote host address: 192.168.1.107      *
+    *  kafka:  TCP port 9092 are broker address: 192.168.1.107          *     
+    *                                                                   *
     *  links:                                                           *
     *    sudo ln ./solarcalc.prom \                                     *
     *            /var/lib/prometheus/node-exporter/gardenpi.prom        *
@@ -47,6 +54,7 @@ permitted by applicable law.
     *   /lib/udev/hwclock-set                                           *
     *   /home/pi/prometheus/prometheus.yml                              *
     *   /etc/iptables/rules.v4                                          *
+    *   /etc/rsyslog.conf                                               *
     *                                                                   *
     * updates/upgrades fetched:                                         *
     *   sudo apt-get update -y                                          *
@@ -68,6 +76,7 @@ permitted by applicable law.
     *       enterprise-rpi_9.2.0_armhf.deb                              *
     *  sudo dpkg -i grafana-enterprise-rpi_9.2.0_armhf.deb              *
     *  apt-get install iptables-persistent                              *           
+    *  sudo apt install rsyslog-kafka                                   *
     *                                                                   *
     * python3 packages added:                                           *
     *  pip3 install tzlocal                                             *

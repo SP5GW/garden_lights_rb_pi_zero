@@ -52,6 +52,15 @@ graf=""
 web=""
 gui=1
 gservice=0
+syslog=0
+kafka=0
+
+
+syslog_server_ip="192.168.1.107"
+syslog_server_port="514"
+
+kafka_broker_ip="192.168.1.107"
+kafka_broker_port="9092"
 
 echo " "
 echo "==> Step1: i2c Bus Test <==="
@@ -189,6 +198,32 @@ else
         gui=0
 fi
 
+echo " "
+echo "===> Step6: RSyslog Connectivity Test <==="
+echo " "
+
+nc -z -w5 "$syslog_server_ip" "$syslog_server_port" 1> /dev/null 2> /dev/null
+
+if [ $? -eq 0 ]; then
+    echo "Remote Syslog Server is Up."
+    syslog=1
+else
+    echo "Remote Syslog Server is Not Reachable."
+fi
+
+echo " "
+echo "===> Step7: Kafka Broker Connectivity Test <==="
+echo " "
+
+nc -z -w5 "$kafka_broker_ip" "$kafka_broker_port" 1> /dev/null 2> /dev/null
+
+if [ $? -eq 0 ]; then
+    echo "Remote Kafka Broker is Up."
+    kafka=1
+else
+    echo "Remote Kafka Broker is Not Reachable."
+fi
+
 
 echo " "
 echo "===> Test Results Summary: <==="
@@ -229,6 +264,21 @@ else
         echo "Step5: GUI Test: FAILED"
 fi
 
+if [ $syslog -eq 1 ]
+then
+        echo "Step6: Syslog Test: PASSED"
+else
+        echo "Step6: Syslog Test: FAILED"
+fi
+
+if [ $kafka -eq 1 ]
+then
+        echo "Step6: Kafka Test: PASSED"
+else
+        echo "Step6: Kafka Test: FAILED"
+fi
+
+
 echo " "
 
 systemctl status gardenlightsctrl.service 2>&1 | grep 'active (running)' 1> /dev/null 2> /dev/null 
@@ -244,7 +294,7 @@ fi
 echo " "
 
 
-if [ $i2c -eq 1 ] && [ $rtc -eq 1 ] && [ $relays -eq 1 ] && [ $buzzer -eq 1 ] && [ $gui -eq 1 ] && [ $gservice -eq 1 ]
+if [ $i2c -eq 1 ] && [ $rtc -eq 1 ] && [ $relays -eq 1 ] && [ $buzzer -eq 1 ] && [ $gui -eq 1 ] && [ $gservice -eq 1 ] && [ $syslog -eq 1 ] && [ $kafka -eq 1 ]
 then
         echo "Your GardenPi Controller is fully functional - enjoy using it!"
 else

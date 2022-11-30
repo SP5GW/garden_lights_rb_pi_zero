@@ -17,6 +17,9 @@ permitted by applicable law.
     *                                                                   *
     * gardenpi command implemented in:                                  *
     *   /home/pi/PyScripts/SolarCalc/test/gardenpi.sh                   *
+    *  /home/pi/PyScripts/SolarCalc/test/gardenpi.conf                  *
+    * note: gardenpi -l option shall be the only method to modify       * 
+    *       contents of the /etc/rsyslog.conf file!                     *
     *                                                                   *
     * GUI for this device is available at: http://this_pi_ip_adr.local  * 
     * GUI implementation is based on:                                   *                                     

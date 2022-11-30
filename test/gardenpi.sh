@@ -1,35 +1,38 @@
 #!/bin/bash
 
-################################################################
-#                                                              #
-# Automated test of gardenpi controller.                       #
-#                                                              #
-# Author: andrzej mazur                                        #
-# Last Change: November, 2022                                  #
-# URL: https://github.com/andrzej1973/garden_lights_rb_pi_zero #
-#                                                              #
-################################################################
+##################################################################
+#                                                                #
+# Automated test of gardenpi controller.                         #
+#                                                                #
+# Author: andrzej mazur                                          #
+# Last Change: November, 2022                                    #
+# URL: https://github.com/andrzej1973/garden_lights_rb_pi_zero   #
+#                                                                #
+##################################################################
 
 
-################################################################
-#                                                              #
-# Usage: gardenpi [OPTIONS]                                    #
-# gardenpi command provides basic information about software   #
-# running on the controller. It also allows to perform basic   #
-# functional test of the gardenpi unit.                        #
-#                                                              #
-# Supported options:                                           #
-#                                                              #
-#  -t, --test                                                  #
-#    Run selftest routine                                      #
-#  -v, --verbose                                               #
-#    Increase logging verbosity.                               #
-#  -V, --version                                               #
-#    Show version number and Python version.                   #
-#  -h, --help                                                  #
-#    Show help message and exit.                               #
-#                                                              #
-################################################################
+##################################################################
+#                                                                #
+# Usage: gardenpi [-l [-d] [-e ip topic]] [-t] [-v] [-V] [-h]    #
+# gardenpi command provides basic information about software     #
+# running on the controller. It also allows to perform basic     #
+# functional test of the gardenpi unit and and configuration of  #
+# remote loggging capabilities over rsyslog and kafka            #
+#                                                                #
+# Supported options:                                             #
+#                                                                #
+#  -l, --logging                                                 #
+#    Configure rsyslog/kafka server ip address and kafka topic   #
+#  -t, --test                                                    #
+#    Run selftest routine                                        #
+#  -v, --verbose                                                 #
+#    Increase logging verbosity.                                 #
+#  -V, --version                                                 #
+#    Show version number and Python version.                     #
+#  -h, --help                                                    #
+#    Show help message and exit.                                 #
+#                                                                #
+##################################################################
 
 function SelfTest {
 
@@ -55,12 +58,14 @@ gservice=0
 syslog=0
 kafka=0
 
+source gardenpi.conf
 
-syslog_server_ip="192.168.1.107"
-syslog_server_port="514"
+#syslog_server_ip="192.168.1.107"
+#syslog_server_port="514"
 
-kafka_broker_ip="192.168.1.107"
-kafka_broker_port="9092"
+#kafka_broker_ip="192.168.1.107"
+#kafka_broker_port="9092"
+#kafka_topic="gardenpi"
 
 echo " "
 echo "==> Step1: i2c Bus Test <==="
@@ -92,7 +97,7 @@ echo " "
 
 if [ $flag_verbose -eq 1 ];then
 	hwclock -rv | grep -iz --color "Time read from Hardware Clock:"
-	
+
 	echo "RTC Module functions correctly if text:"
 	echo ">>>Time read from Hardware Clock:<<<"
 	echo "is seen on above priontout from hwclock command."
@@ -198,32 +203,40 @@ else
         gui=0
 fi
 
-echo " "
-echo "===> Step6: RSyslog Connectivity Test <==="
-echo " "
+#if log redirect is configured test it
+if [[ $(grep "^# *.* @@" ./rsyslog.conf) == "" ]]
+then
+	echo " "
+	echo "===> Step6: RSyslog Connectivity Test <==="
+	echo " "
 
-nc -z -w5 "$syslog_server_ip" "$syslog_server_port" 1> /dev/null 2> /dev/null
 
-if [ $? -eq 0 ]; then
-    echo "Remote Syslog Server is Up."
-    syslog=1
+	nc -z -w5 "$logging_server_ip" 514 1> /dev/null 2> /dev/null
+
+	if [ $? -eq 0 ]; then
+    		echo "Remote Syslog Server is Up."
+    		syslog=1
+	else
+    		echo "Remote Syslog Server is Not Reachable."
+	fi
+
+	echo " "
+	echo "===> Step7: Kafka Broker Connectivity Test <==="
+	echo " "
+
+	nc -z -w5 "$logging_server_ip" 9092 1> /dev/null 2> /dev/null
+
+	if [ $? -eq 0 ]; then
+    		echo "Remote Kafka Broker is Up."
+    		kafka=1
+	else
+    		echo "Remote Kafka Broker is Not Reachable."
+	fi
 else
-    echo "Remote Syslog Server is Not Reachable."
+	#exlude syslog and kafka from test results summary
+	syslog=3
+	kafka=3 
 fi
-
-echo " "
-echo "===> Step7: Kafka Broker Connectivity Test <==="
-echo " "
-
-nc -z -w5 "$kafka_broker_ip" "$kafka_broker_port" 1> /dev/null 2> /dev/null
-
-if [ $? -eq 0 ]; then
-    echo "Remote Kafka Broker is Up."
-    kafka=1
-else
-    echo "Remote Kafka Broker is Not Reachable."
-fi
-
 
 echo " "
 echo "===> Test Results Summary: <==="
@@ -267,15 +280,23 @@ fi
 if [ $syslog -eq 1 ]
 then
         echo "Step6: Syslog Test: PASSED"
-else
+elif [ $syslog -eq 0 ]
+then
         echo "Step6: Syslog Test: FAILED"
+else
+	#ignore syslog in final healthcheck statement
+	syslog=1
 fi
 
 if [ $kafka -eq 1 ]
 then
-        echo "Step6: Kafka Test: PASSED"
+        echo "Step7: Kafka Test: PASSED"
+elif [ $kafka -eq 0 ]
+then
+        echo "Step7: Kafka Test: FAILED"
 else
-        echo "Step6: Kafka Test: FAILED"
+	#ignore kafka in final healthcheck statement
+	kafka=1
 fi
 
 
@@ -302,9 +323,116 @@ else
         echo "Please check documentation for troubleshooting tips."
 fi
 
+if [[ "$(grep "^# *.* @@" ./rsyslog.conf)" != "" ]]; then
+	echo " "
+	echo "###############################################################"
+	echo "#  log forwarding over syslog or kafka not configured, use:   #"
+        echo "#             sudo gardenpi -l -e ip topic                    #"
+        echo "#  to configure it.                                           #"
+	echo "###############################################################"
+	echo " "
+fi
+
 echo "exiting gardenpi command..."
 
 } #end of selftest function
+
+function LoggingCfg {
+#enable /disable logging
+
+if [ "$(id -u)" -ne 0 ]; then
+        echo "Running gardenpi logging config requires root privilages!"
+        echo "use: sudo gardenpi --logging server_ip kafka_topic  instead..."
+  exit
+fi
+
+case $loggingcfg_action in
+	--enable | -e)
+		if [ $loggingcfg_param -ne 4 ]; then
+        		echo "mandatory parameter missing" 
+        		echo "use: sudo gardenpi -l -e server_ip kafka_topic"
+        		exit
+		fi
+
+		if [[ "$(ping -q $logging_server_ip -c 1 2>&1 | grep 'Name or service not known')" != "" ]]; then
+        		#specified ip address incorrect or not reachable
+        		echo "gardenpi -l: ${logging_server_ip}:Name or service not known"
+        		exit
+		fi
+
+		#find log redirection line in rsyslog.conf file 
+		#and replace it with one including remote server ip address
+		sed -i '/*.* @@/c\*.* @@'"${logging_server_ip}"':514' /etc/rsyslog.conf
+
+		#find kafka producer configuration line in rsyslog.conf file
+		#and replace it with one including broker ip address and topic
+		sed -i '/action(type="omkafka"/c\action(type="omkafka" topic="'"${kafka_topic}"\
+'" broker=["'"${logging_server_ip}"':9092"] template="ls_json")' /etc/rsyslog.conf
+
+		#apply new parameters to rsyslog service configuration
+		systemctl daemon-reload 2>&1
+		systemctl restart  syslog.service 2>&1
+
+		#store server ip and topic in config file
+
+		sed -i '/logging_server_ip/c\logging_server_ip='"${logging_server_ip}" ./gardenpi.conf
+		sed -i '/kafka_topic/c\kafka_topic='"${kafka_topic}" ./gardenpi.conf
+
+		exit
+		;;
+	--disable | -d)
+		echo "$loggingcfg_param"
+                if [ $loggingcfg_param -ne 2 ]; then
+                        echo "too many parameters given" 
+                        echo "use: sudo gardenpi -l -d"
+                        exit
+                fi
+
+		source gardenpi.conf
+
+                #find log redirection line in rsyslog.conf file 
+                #and replace it with one including remote server ip address commented out
+                sed -i '/*.* @@/c\#*.* @@'"${logging_server_ip}"':514' /etc/rsyslog.conf
+
+                #find kafka producer configuration line in rsyslog.conf file
+                #and replace it with one including broker ip address and topic commented out
+                sed -i '/action(type="omkafka"/c\#action(type="omkafka" topic="'"${kafka_topic}"\
+'" broker=["'"${logging_server_ip}"':9092"] template="ls_json")' /etc/rsyslog.conf
+
+                #apply new parameters to rsyslog service configuration
+                systemctl daemon-reload 2>&1
+                systemctl restart  syslog.service 2>&1
+
+                #store server ip and topic in config file
+
+                sed -i '/logging_server_ip/c\logging_server_ip=' ./gardenpi.conf
+                sed -i '/kafka_topic/c\kafka_topic=' ./gardenpi.conf
+
+		exit
+		;;
+
+        --show | -s)
+                echo "$loggingcfg_param"
+                if [ $loggingcfg_param -ne 2 ]; then
+                        echo "too many parameters given" 
+                        echo "use: sudo gardenpi -l -s"
+                        exit
+                fi
+
+                source gardenpi.conf
+
+		echo "logging server ip address: ${logging_server_ip}"
+		echo "kafka topic: ${kafka_topic}"
+                exit
+                ;;
+
+	*)
+		 echo "mandatory parameters missing" 
+                 echo "use: gardenpi --help"
+	;;
+esac
+
+} #end of loggingcfg function
 
 
 ####Main body of the script###
@@ -312,6 +440,11 @@ echo "exiting gardenpi command..."
 #global flags
 flag_verbose=0
 flag_selftest=0
+flag_loggingcfg=0
+
+loggingcfg_param=1
+logging_server_ip=""
+kafka_topic=""
 
 while [ ! $# -eq 0 ]
 do
@@ -321,11 +454,15 @@ do
                         exit
                         ;;
                 --help | -h)
+			echo "Usage: gardenpi [-l [-d] [-e ip topic]] [-t] [-v] [-V] [-h]"
                         echo "gardenpi command provides basic information about software"
 			echo "running on this controller. It also allows to perform basic"
-                        echo "functional test of the gardenpi unit."
+                        echo "functional test of the gardenpi unit and configuration of "
+			echo "remote loggging capabilities over rsyslog and kafka"
                         echo " "
 			echo "Options:"
+			echo "  -l, --logging"
+			echo "    Configure rsyslog/kafka server ip address and kafka topic"
 			echo "  -t, --test"
 			echo "    Run selftest routine"
 			echo "  -v, --verbose"
@@ -342,10 +479,26 @@ do
                 --verbose | -v)
                         flag_verbose=1
                         ;;
+		--logging | -l)
+			flag_loggingcfg=1
+			;;
                 *)
-                        echo $0": invalid option: "$1
-                        echo "Try:'" $0 "--help' for more information. "
-                        exit
+			if [ $flag_loggingcfg -eq 0 ]; then
+                        	echo $0": invalid option: "$1
+                        	echo "Try:'" $0 "--help' for more information. "
+                        	exit
+			fi
+
+			if [ $loggingcfg_param -eq 1 ]; then
+				loggingcfg_param=2
+				loggingcfg_action=$1
+			elif [ $loggingcfg_param -eq 2 ]; then
+				loggingcfg_param=3
+				logging_server_ip=$1
+			elif [ $loggingcfg_param -eq 3 ]; then
+                                loggingcfg_param=4
+                                kafka_topic=$1
+			fi
 			;;
         esac
         shift
@@ -356,4 +509,11 @@ if [ $flag_selftest -eq 1 ]; then
 	exit
 fi
 
+if [ $flag_loggingcfg -eq 1 ]; then
+	LoggingCfg
+	exit
+fi
+
 cat /etc/motd
+
+

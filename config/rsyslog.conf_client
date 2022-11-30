@@ -1,3 +1,11 @@
+###########################################################
+#                                                         #
+# Do not modify kafka and log re-direction rules manually #
+# Always use gardenpi --logging command to specify remote # 
+# server ip address and kafka topic!                      #
+#                                                         #
+###########################################################
+
 # /etc/rsyslog.conf configuration file for rsyslog
 #
 # For more information install rsyslog-doc and see
@@ -10,7 +18,7 @@
 
 module(load="imuxsock") # provides support for local system logging
 module(load="imklog")   # provides kernel logging support
-module(load="omkafka")   # lets you send to Kafka
+module(load="omkafka")   # lets you send logs to Kafka
 #module(load="immark")  # provides --MARK-- message capability
 #module(load="imfile")    # if you want to tail files
 
@@ -118,6 +126,15 @@ mail.err			/var/log/mail.err
 #
 *.emerg				:omusrmsg:*
 
+###########################################################
+#                                                         #
+# Do not modify kafka and log re-direction rules manually #
+# Always use gardenpi --logging command to specify remote # 
+# server ip address and kafka topic!                      #
+#                                                         #
+###########################################################
+
+
 #
 # Publish logs already stored locally over kafka
 #
@@ -125,9 +142,18 @@ mail.err			/var/log/mail.err
 #$ModLoad omkafka
 action(type="omkafka" topic="gardenpi" broker=["192.168.1.107:9092"] template="ls_json")
 
+###########################################################
+#                                                         #
+# Do not modify kafka and log re-direction rules manually #
+# Always use gardenpi --logging command to specify remote # 
+# server ip address and kafka topic!                      #
+#                                                         #
+###########################################################
+
 
 #
 # Log fowarding rule, use udp to forward logs 
 # to syslog server, which were earlier stored locally
 # 
-*.* @192.168.1.107:514
+#
+*.* @@192.168.1.107:514

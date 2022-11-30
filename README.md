@@ -5,7 +5,7 @@
 <img src="./hw/gardenpi_internal.jpg" width="350" height="150"/>
 </p>
 
-GardenPi is a Raspberry Pi Zero based two channel garden light controller, which includes hardware platform and systemd service written in python. Lights are automatically switched on/off based on calculated sunset time for provided location. Manual lights control is also supported.
+GardenPi is a Raspberry Pi Zero based two channel garden light controller, which includes hardware platform and systemd service written in python. Lights are automatically switched on/off based on calculated sunset time for provided location. Manual lights control is also supported. General information about status of the platform can be obtained from GUI and through cli command gardenpi, which also provides self diagnostics and remote logging configuration capabilities.
 
 Platform is powered by:
 <p align="left">
@@ -44,6 +44,7 @@ Platform is powered by:
 - Simple unit diagnostics can be obtained by running command sudo gardenpi --test
 - Buzzer volume can be controlled with potentiometer Buzz. Vol.
 - Controller's syslog messages are forwarded to rsyslog server and kafka broker
+- Remote loggin enabled/configured/disabled using sudo gardenpi --logging option with parameters
 
 
 **Design and Build Instructions**
@@ -122,6 +123,7 @@ To execute device selftest execute: **sudo gardenpi --test**
 * Release 4.1 - November 2022 - new functionality and bug fixes:
 	- possibility to set different lights-on durations for winter and summer times added
 	- syslog messages are forwarded to rsyslog server and kafka broker
+	- gardenpi command enhanced with remote logging configuration options
 	* 	bug fix: depreciated zone function replaced in tzlocal with get_localtz_name() function call
 	* 	bug fix: time presission correted in some info traces
 	

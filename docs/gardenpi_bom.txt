@@ -33,4 +33,9 @@ Knob												1
 LED						3mm, blue					2
 Round Rocker SPST Toggle Switch			DC 12V 20A,ON/OFF,Blue LED, fits 20,5mm hole	2
 Round Rocker SPST Toggle Switch			DC 12V 20A,ON/OFF,Green LED, fits 20,5mm hole	1
-					
+Kycon DC Power Connector			KPPX-4P						1	Mouser: 806-KPPX-4P
+Kycon DC Power Connector			KPJX-PM-4S-S					1	Mouser: 806-KPJX-PM-4S-S
+4 wire installation cable			50cm, OMY4x0,75,H03VVH2-F 			1	Allegro/digma_pl					
+screws M2x20					length: 20mm, diameter: M2 (2mm)		2 	Allegro/jack20prv
+nuts M2						diameter:M2 (2mm)				2	Allegro/jack20prv
+

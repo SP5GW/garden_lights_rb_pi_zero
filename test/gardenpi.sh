@@ -5,7 +5,7 @@
 # Automated test of gardenpi controller.                         #
 #                                                                #
 # Author: andrzej mazur                                          #
-# Last Change: November, 2022                                    #
+# Last Change: December, 2022                                    #
 # URL: https://github.com/andrzej1973/garden_lights_rb_pi_zero   #
 #                                                                #
 ##################################################################
@@ -450,7 +450,7 @@ while [ ! $# -eq 0 ]
 do
         case "$1" in
                 --version | -V)
-                        echo "gardenpi version 4.1"
+                        echo "gardenpi version 5.0"
                         exit
                         ;;
                 --help | -h)

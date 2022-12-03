@@ -1,8 +1,7 @@
 **<p style="text-align: center;">GardenPi - The Garden Light Controller</p>**
 
 <p align="center">
-<img src="./hw/gardenpi_front.jpg" width="350" height="150"/>
-<img src="./hw/gardenpi_internal.jpg" width="350" height="150"/>
+<img src="./hw/gardenpi_front.jpg" width="350" height="250"/>
 </p>
 
 GardenPi is a Raspberry Pi Zero based two channel garden light controller, which includes hardware platform and systemd service written in python. Lights are automatically switched on/off based on calculated sunset time for provided location. Manual lights control is also supported. General information about status of the platform can be obtained from GUI and through cli command gardenpi, which also provides self diagnostics and remote logging configuration capabilities.
@@ -44,7 +43,9 @@ Platform is powered by:
 - Simple unit diagnostics can be obtained by running command sudo gardenpi --test
 - Buzzer volume can be controlled with potentiometer Buzz. Vol.
 - Controller's syslog messages are forwarded to rsyslog server and kafka broker
-- Remote loggin enabled/configured/disabled using sudo gardenpi --logging option with parameters
+- Remote logging enabled/configured/disabled using sudo gardenpi --logging option with parameters
+- Power plug with additional digital line indicating source of power (solar vs. dc power supply) added
+- Additional hardware unit switching automatically power source to dc power supply when battery voltage is too low released as a separate project (Solar / DC Backup Power Switch with Power Source Indicator). Unit is fully compatible with gardenpi controller version 5.0 and later.
 
 
 **Design and Build Instructions**
@@ -126,13 +127,15 @@ To execute device selftest execute: **sudo gardenpi --test**
 	- gardenpi command enhanced with remote logging configuration options
 	* 	bug fix: depreciated zone function replaced in tzlocal with get_localtz_name() function call
 	* 	bug fix: time presission correted in some info traces
+* 	Release 5.0 December 2022 - new functionality:
+	- 	Power connector changed to unique type, preventing accidental power cable incorrect insertion
+	- 	Support for power source indicator (solar vs. power supply added)
 	
 **Planned Functionality**
 
 * External WiFi antenna support
-* WiFi configuration using ini file
-* Power source indicator (solar vs. power supply)
 * Gardenpi service logging to syslog
+* man page for gardenpi command
 
 
 Comments or Questions can be directed to: andrzej@mazur.info
